@@ -7,6 +7,8 @@ from termcolor import colored
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
 
 # Load environment variables
 load_dotenv(".env")
@@ -16,7 +18,8 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 openai.api_key = OPENAI_API_KEY
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
-
+MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
+mistralClient = MistralClient(api_key=MISTRAL_API_KEY)
 
 def generate_response(prompt: str, ai_model: str) -> str:
     """
@@ -58,6 +61,12 @@ def generate_response(prompt: str, ai_model: str) -> str:
         model = genai.GenerativeModel('gemini-pro')
         response_model = model.generate_content(prompt)
         response = response_model.text
+
+    elif ai_model in ["mistral-small-latest", "mistral-medium-latest", "mistral-large-latest"]:
+        response = mistralClient.chat(
+            model=ai_model,
+            messages=[ChatMessage(role="user", content=prompt)],
+        ).choices[0].message.content
 
     else:
 
