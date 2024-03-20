@@ -65,10 +65,10 @@ def generate_response(prompt: str, ai_model: str) -> str:
 
     return response
 
-def generate_script(video_subject: str, paragraph_number: int, ai_model: str, voice: str, customPrompt: str) -> str:
+def generate_script(video_subject: str, word_count: int, ai_model: str, voice: str, customPrompt: str) -> str:
 
     """
-    Generate a script for a video, depending on the subject of the video, the number of paragraphs, and the AI model.
+    Generate a script for a video, depending on the subject of the video, the number of words, and the AI model.
 
 
 
@@ -76,7 +76,7 @@ def generate_script(video_subject: str, paragraph_number: int, ai_model: str, vo
 
         video_subject (str): The subject of the video.
 
-        paragraph_number (int): The number of paragraphs to generate.
+        word_count (int): The count of words to generate.
 
         ai_model (str): The AI model to use for generation.
 
@@ -96,7 +96,7 @@ def generate_script(video_subject: str, paragraph_number: int, ai_model: str, vo
         prompt = """
             Generate a script for a video, depending on the subject of the video.
 
-            The script is to be returned as a string with the specified number of paragraphs.
+            The script is to be returned as a string with the specified word count.
 
             Here is an example of a string:
             "This is an example string."
@@ -116,7 +116,7 @@ def generate_script(video_subject: str, paragraph_number: int, ai_model: str, vo
     prompt += f"""
 
     Subject: {video_subject}
-    Number of paragraphs: {paragraph_number}
+    Word count: {word_count}
     Language: {voice}
 
     """
@@ -137,19 +137,7 @@ def generate_script(video_subject: str, paragraph_number: int, ai_model: str, vo
         response = re.sub(r"\[.*\]", "", response)
         response = re.sub(r"\(.*\)", "", response)
 
-        # Split the script into paragraphs
-        paragraphs = response.split("\n\n")
-
-        # Select the specified number of paragraphs
-        selected_paragraphs = paragraphs[:paragraph_number]
-
-        # Join the selected paragraphs into a single string
-        final_script = "\n\n".join(selected_paragraphs)
-
-        # Print to console the number of paragraphs used
-        print(colored(f"Number of paragraphs used: {len(selected_paragraphs)}", "green"))
-
-        return final_script
+        return response
     else:
         print(colored("[-] GPT returned an empty response.", "red"))
         return None

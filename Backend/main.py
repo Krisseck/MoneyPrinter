@@ -53,7 +53,7 @@ def generate():
 
         # Parse JSON
         data = request.get_json()
-        paragraph_number = int(data.get('paragraphNumber', 1))  # Default to 1 if not provided
+        word_count = int(data.get('wordCount', 1))  # Default 40 1 if not provided
         ai_model = data.get('aiModel')  # Get the AI model selected by the user
         n_threads = data.get('threads')  # Amount of threads to use for video generation
         subtitles_position = data.get('subtitlesPosition')  # Position of the subtitles in the video
@@ -105,7 +105,7 @@ def generate():
 
 
         # Generate a script
-        script = generate_script(data["videoSubject"], paragraph_number, ai_model, voice, data["customPrompt"])  # Pass the AI model to the script generation
+        script = generate_script(data["videoSubject"], word_count, ai_model, voice, data["customPrompt"])  # Pass the AI model to the script generation
 
         # Generate search terms
         search_terms = get_search_terms(
