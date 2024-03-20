@@ -13,12 +13,12 @@ from datetime import timedelta
 from moviepy.video.fx.all import crop
 from moviepy.video.tools.subtitles import SubtitlesClip
 
-load_dotenv("../.env")
+load_dotenv(".env")
 
 ASSEMBLY_AI_API_KEY = os.getenv("ASSEMBLY_AI_API_KEY")
 
 
-def save_video(video_url: str, directory: str = "../temp") -> str:
+def save_video(video_url: str, directory: str = "./temp") -> str:
     """
     Saves a video from a given URL and returns the path to the video.
 
@@ -50,7 +50,7 @@ def __generate_subtitles_assemblyai(audio_path: str, voice: str) -> str:
 
     language_mapping = {
         "br": "pt",
-        "id": "en", #AssemblyAI doesn't have Indonesian 
+        "id": "en", #AssemblyAI doesn't have Indonesian
         "jp": "ja",
         "kr": "ko",
     }
@@ -120,7 +120,7 @@ def generate_subtitles(audio_path: str, sentences: List[str], audio_clips: List[
         srt_equalizer.equalize_srt_file(srt_path, srt_path, max_chars)
 
     # Save subtitles
-    subtitles_path = f"../subtitles/{uuid.uuid4()}.srt"
+    subtitles_path = f"./subtitles/{uuid.uuid4()}.srt"
 
     if ASSEMBLY_AI_API_KEY is not None and ASSEMBLY_AI_API_KEY != "":
         print(colored("[+] Creating subtitles using AssemblyAI", "blue"))
@@ -157,8 +157,8 @@ def combine_videos(video_paths: List[str], max_duration: int, max_clip_duration:
         str: The path to the combined video.
     """
     video_id = uuid.uuid4()
-    combined_video_path = f"../temp/{video_id}.mp4"
-    
+    combined_video_path = f"./temp/{video_id}.mp4"
+
     # Required duration of each clip
     req_dur = max_duration / len(video_paths)
 
@@ -222,7 +222,7 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
     # Make a generator that returns a TextClip when called with consecutive
     generator = lambda txt: TextClip(
         txt,
-        font="../fonts/bold_font.ttf",
+        font="./fonts/bold_font.ttf",
         fontsize=100,
         color=text_color,
         stroke_color="black",
@@ -243,6 +243,6 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
     audio = AudioFileClip(tts_path)
     result = result.set_audio(audio)
 
-    result.write_videofile("../temp/output.mp4", threads=threads or 2)
+    result.write_videofile("./temp/output.mp4", threads=threads or 2)
 
     return "output.mp4"

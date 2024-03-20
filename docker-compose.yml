@@ -1,36 +1,23 @@
 version: "3"
 services:
-  frontend:
+  moneyprinterplus:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: "frontend"
-    ports:
-      - "8001:8001"
-    command: ["python3", "-m", "http.server", "8001", "--directory", "frontend"]
-    volumes:
-      - ./Frontend:/app/frontend
-    restart: always
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: "backend"
     ports:
       - "8080:8080"
-    command: ["python3", "backend/main.py"]
+    command: ["python3", "Backend/main.py"]
     volumes:
       - ./files:/temp
-      - ./Backend:/app/backend
+      - ./Backend:/app/Backend
+      - ./Frontend:/app/Frontend
       - ./fonts:/app/fonts
     environment:
       - ASSEMBLY_AI_API_KEY=${ASSEMBLY_AI_API_KEY}
       - TIKTOK_SESSION_ID=${TIKTOK_SESSION_ID}
-      - IMAGEMAGICK_BINARY=/usr/local/bin/magick
+      - IMAGEMAGICK_BINARY=/usr/bin/convert
       - PEXELS_API_KEY=${PEXELS_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-    depends_on:
-      - frontend
     restart: always
 
 volumes:

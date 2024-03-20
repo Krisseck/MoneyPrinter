@@ -50,7 +50,7 @@ def fetch_songs(zip_url: str) -> None:
     try:
         logger.info(colored(f" => Fetching songs...", "magenta"))
 
-        files_dir = "../Songs"
+        files_dir = "./Songs"
         if not os.path.exists(files_dir):
             os.mkdir(files_dir)
             logger.info(colored(f"Created directory: {files_dir}", "green"))
@@ -62,17 +62,17 @@ def fetch_songs(zip_url: str) -> None:
         response = requests.get(zip_url)
 
         # Save the zip file
-        with open("../Songs/songs.zip", "wb") as file:
+        with open("./Songs/songs.zip", "wb") as file:
             file.write(response.content)
 
         # Unzip the file
-        with zipfile.ZipFile("../Songs/songs.zip", "r") as file:
-            file.extractall("../Songs")
+        with zipfile.ZipFile("./Songs/songs.zip", "r") as file:
+            file.extractall("./Songs")
 
         # Remove the zip file
-        os.remove("../Songs/songs.zip")
+        os.remove("./Songs/songs.zip")
 
-        logger.info(colored(" => Downloaded Songs to ../Songs.", "green"))
+        logger.info(colored(" => Downloaded Songs to ./Songs.", "green"))
 
     except Exception as e:
         logger.error(colored(f"Error occurred while fetching songs: {str(e)}", "red"))
@@ -85,10 +85,10 @@ def choose_random_song() -> str:
         str: The path to the chosen song.
     """
     try:
-        songs = os.listdir("../Songs")
+        songs = os.listdir("./Songs")
         song = random.choice(songs)
         logger.info(colored(f"Chose song: {song}", "green"))
-        return f"../Songs/{song}"
+        return f"./Songs/{song}"
     except Exception as e:
         logger.error(colored(f"Error occurred while choosing random song: {str(e)}", "red"))
 
@@ -105,7 +105,7 @@ def check_env_vars() -> None:
     """
     try:
         required_vars = ["PEXELS_API_KEY", "TIKTOK_SESSION_ID", "IMAGEMAGICK_BINARY"]
-        missing_vars = [var + os.getenv(var)  for var in required_vars if os.getenv(var) is None or (len(os.getenv(var)) == 0)]  
+        missing_vars = [var + os.getenv(var)  for var in required_vars if os.getenv(var) is None or (len(os.getenv(var)) == 0)]
 
         if missing_vars:
             missing_vars_str = ", ".join(missing_vars)

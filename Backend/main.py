@@ -47,8 +47,8 @@ def generate():
         GENERATING = True
 
         # Clean
-        clean_dir("../temp/")
-        clean_dir("../subtitles/")
+        clean_dir("./temp/")
+        clean_dir("./subtitles/")
 
 
         # Parse JSON
@@ -93,7 +93,7 @@ def generate():
                     "data": [],
                 }
             )
-        
+
         voice = data["voice"]
         voice_prefix = voice[:2]
 
@@ -151,7 +151,7 @@ def generate():
                     "data": [],
                 }
             )
-            
+
         # Define video_paths
         video_paths = []
 
@@ -206,14 +206,14 @@ def generate():
                         "data": [],
                     }
                 )
-            current_tts_path = f"../temp/{uuid4()}.mp3"
+            current_tts_path = f"./temp/{uuid4()}.mp3"
             tts(sentence, voice, filename=current_tts_path)
             audio_clip = AudioFileClip(current_tts_path)
             paths.append(audio_clip)
 
         # Combine all TTS files using moviepy
         final_audio = concatenate_audioclips(paths)
-        tts_path = f"../temp/{uuid4()}.mp3"
+        tts_path = f"./temp/{uuid4()}.mp3"
         final_audio.write_audiofile(tts_path)
 
         try:
@@ -260,7 +260,7 @@ def generate():
                 video_category_id = "28"  # Science & Technology
                 privacyStatus = "private"  # "public", "private", "unlisted"
                 video_metadata = {
-                    'video_path': os.path.abspath(f"../temp/{final_video_path}"),
+                    'video_path': os.path.abspath(f"./temp/{final_video_path}"),
                     'title': title,
                     'description': description,
                     'category': video_category_id,
@@ -283,7 +283,7 @@ def generate():
                 except HttpError as e:
                     print(f"An HTTP error {e.resp.status} occurred:\n{e.content}")
 
-        video_clip = VideoFileClip(f"../temp/{final_video_path}")
+        video_clip = VideoFileClip(f"./temp/{final_video_path}")
         if use_music:
             # Select a random song
             song_path = choose_random_song()
@@ -301,9 +301,9 @@ def generate():
             video_clip = video_clip.set_audio(comp_audio)
             video_clip = video_clip.set_fps(30)
             video_clip = video_clip.set_duration(original_duration)
-            video_clip.write_videofile(f"../{final_video_path}", threads=n_threads or 1)
+            video_clip.write_videofile(f"./{final_video_path}", threads=n_threads or 1)
         else:
-            video_clip.write_videofile(f"../{final_video_path}", threads=n_threads or 1)
+            video_clip.write_videofile(f"./{final_video_path}", threads=n_threads or 1)
 
 
         # Let user know
