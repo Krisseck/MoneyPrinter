@@ -3,7 +3,7 @@ from utils import *
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv("../.env")
+load_dotenv(".env")
 # Check if all required environment variables are set
 # This must happen before importing video which uses API keys without checking
 check_env_vars()
@@ -17,7 +17,7 @@ from flask_cors import CORS
 from termcolor import colored
 from youtube import upload_video
 from apiclient.errors import HttpError
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 from moviepy.config import change_settings
 
 
@@ -28,7 +28,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 change_settings({"IMAGEMAGICK_BINARY": os.getenv("IMAGEMAGICK_BINARY")})
 
 # Initialize Flask
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='../Frontend')
 CORS(app)
 
 # Constants
@@ -346,6 +346,11 @@ def cancel():
     GENERATING = False
 
     return jsonify({"status": "success", "message": "Cancelled video generation."})
+
+
+@app.route('/', methods=['GET'])
+def redirect_to_index():
+    return redirect('/index.html')
 
 
 if __name__ == "__main__":
