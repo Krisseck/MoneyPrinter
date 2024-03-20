@@ -14,7 +14,7 @@ def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> 
     Returns:
         List[str]: A list of stock videos.
     """
-    
+
     # Build headers
     headers = {
         "Authorization": api_key
@@ -32,7 +32,6 @@ def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> 
     # Parse each video
     raw_urls = []
     video_url = []
-    video_res = 0
     try:
         # loop through each video in the result
         for i in range(it):
@@ -41,7 +40,8 @@ def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> 
                 continue
             raw_urls = response["videos"][i]["video_files"]
             temp_video_url = ""
-            
+            video_res = 0
+
             # loop through each url to determine the best quality
             for video in raw_urls:
                 # Check if video has a valid download link
@@ -50,11 +50,11 @@ def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> 
                     if (video["width"]*video["height"]) > video_res:
                         temp_video_url = video["link"]
                         video_res = video["width"]*video["height"]
-                        
+
             # add the url to the return list if it's not empty
             if temp_video_url != "":
                 video_url.append(temp_video_url)
-                
+
     except Exception as e:
         print(colored("[-] No Videos found.", "red"))
         print(colored(e, "red"))

@@ -146,6 +146,14 @@ def generate_script(video_subject: str, word_count: int, ai_model: str, voice: s
         response = re.sub(r"\[.*\]", "", response)
         response = re.sub(r"\(.*\)", "", response)
 
+        # Remove quote marks
+        if response.startswith('"'):
+            response = response[1:]
+        if response.endswith('"'):
+            response = response[:-1]
+
+        response = response.strip()
+
         return response
     else:
         print(colored("[-] GPT returned an empty response.", "red"))
