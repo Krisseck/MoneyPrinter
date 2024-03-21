@@ -38,6 +38,8 @@
           class="flex flex-col space-y-4 hidden transition-all duration-150 linear"
           id="advancedOptions"
         >
+          <h2 class="text-blue-600 text-2xl border-solid border-b border-blue-600 font-bold">AI</h2>
+
           <label for="aiModel" class="text-blue-600">AI Model</label>
           <select
             name="aiModel"
@@ -52,6 +54,30 @@
             <option value="mistral-medium-latest">Mistral Medium</option>
             <option value="mistral-large-latest">Mistral Large</option>
           </select>
+
+          <label for="wordCount" class="text-blue-600"
+          >Word Count</label>
+          <input
+                  type="number"
+                  name="wordCount"
+                  id="wordCount"
+                  class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                  value="40"
+                  min="1"
+                  max="200"
+          />
+
+          <label for="customPrompt" class="text-blue-600">Custom Prompt:</label>
+          <textarea
+                  rows="3"
+                  name="customPrompt"
+                  id="customPrompt"
+                  class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                  placeholder="only use it if you want to replace the default prompt"
+          ></textarea>
+
+          <h2 class="text-blue-600 text-2xl border-solid border-b border-blue-600 font-bold">Voiceover</h2>
+
           <label for="voice" class="text-blue-600">Voice</label>
           <select
             name="voice"
@@ -100,9 +126,9 @@
             <option value="en_male_funny">wacky</option>
             <option value="en_female_emotional">peaceful</option>
           </select>
+
           <label for="subtitlesPosition" class="text-blue-600"
-            >Subtitles Position</label
-          >
+            >Subtitles Position</label>
           <select
             name="subtitlesPosition"
             id="subtitlesPosition"
@@ -116,6 +142,7 @@
             <option value="right,center">Right - Center</option>
             <option value="right,bottom">Right - Bottom</option>
           </select>
+
           <label for="subtitlesColor" class="text-blue-600"
             >Subtitles Color</label>
           <select
@@ -130,55 +157,41 @@
             <option value="#fff">White</option>
             <option value="#03071e">Black</option>
           </select>
+
+          <h2 class="text-blue-600 text-2xl border-solid border-b border-blue-600 font-bold">Video</h2>
+
           <label for="watermarkPath" class="text-blue-600"
-          >Watermark Image Path (Leave empty for no watermark)</label
-          >
+          >Watermark Image Path (Leave empty for no watermark)</label>
           <input
                   type="text"
                   name="watermarkPath"
                   id="watermarkPath"
                   class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
           />
+
+          <label for="threads" class="text-blue-600">FFMPEG Threads</label>
+          <input
+                  type="number"
+                  name="threads"
+                  id="threads"
+                  class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                  value="2"
+                  min="1"
+                  max="100"
+                  placeholder="2 (Default)"
+          />
+
+          <h2 class="text-blue-600 text-2xl border-solid border-b border-blue-600 font-bold">Misc</h2>
+
           <label for="zipUrl" class="text-blue-600"
-            >Zip URL (Leave empty for default)</label
-          >
+            >Zip URL (Leave empty for default)</label>
           <input
             type="text"
             name="zipUrl"
             id="zipUrl"
             class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
           />
-          <label for="threads" class="text-blue-600">Threads</label>
-          <input
-            type="number"
-            name="threads"
-            id="threads"
-            class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
-            value="2"
-            min="1"
-            max="100"
-            placeholder="2 (Default)"
-          />
-          <label for="wordCount" class="text-blue-600"
-            >Word Count</label
-          >
-          <input
-            type="number"
-            name="wordCount"
-            id="wordCount"
-            class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
-            value="40"
-            min="1"
-            max="200"
-          />
-          <label for="customPrompt" class="text-blue-600">Custom Prompt:</label>
-            <textarea
-              rows="3"
-              name="customPrompt"
-              id="customPrompt"
-              class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="only use it if you want to replace the default prompt"
-            ></textarea>
+
           <label
             for="youtubeUploadToggle"
             class="flex items-center text-blue-600"
