@@ -205,7 +205,7 @@ def combine_videos(video_paths: List[str], max_duration: int, max_clip_duration:
     return combined_video_path
 
 
-def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str, threads: int, subtitles_position: str,  text_color : str, watermark_path : str) -> str:
+def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str, threads: int, subtitles_position: str,  text_color : str, watermark_path : str, watermark_position: str, watermark_size: float) -> str:
     """
     This function creates the final video, with subtitles and audio.
 
@@ -216,6 +216,8 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
         threads (int): The number of threads to use for the video processing.
         subtitles_position (str): The position of the subtitles.
         watermark_path (str): The path of the watermark image file.
+        watermark_position (str): The position of the watermark.
+        watermark_size (float): The size of the watermark.
 
     Returns:
         str: The path to the final video.
@@ -244,8 +246,11 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
         subtitles.set_pos((horizontal_subtitles_position, vertical_subtitles_position))
     ]
 
+    # Split the watermark position into horizontal and vertical
+    horizontal_watermark_position, vertical_watermark_position = watermark_position.split(",")
+
     if watermark_path:
-        clips.append(ImageClip(watermark_path, duration=combined_video_clip.duration).set_pos((round(0.05 * combined_video_clip.w), "bottom")).resize(width=round(0.35 * combined_video_clip.w)))
+        clips.append(ImageClip(watermark_path, duration=combined_video_clip.duration).set_pos((horizontal_watermark_position, vertical_watermark_position)).resize(width=round(watermark_size * combined_video_clip.w)))
 
     result = CompositeVideoClip(clips)
 

@@ -169,6 +169,34 @@
                   class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
           />
 
+          <label for="watermarkPosition" class="text-blue-600"
+          >Watermark Position</label>
+          <select
+                  name="watermarkPosition"
+                  id="watermarkPosition"
+                  class="w-min border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
+          >
+            <option value="center,top">Center - Top</option>
+            <option value="center,bottom">Center - Bottom</option>
+            <option value="center,center">Center - Center</option>
+            <option value="left,center">Left - Center</option>
+            <option value="left,bottom">Left - Bottom</option>
+            <option value="right,center">Right - Center</option>
+            <option value="right,bottom">Right - Bottom</option>
+          </select>
+
+          <label for="watermarkSize" class="text-blue-600">Watermark Size (in % of video width)</label>
+          <input
+                  type="number"
+                  name="watermarkSize"
+                  id="watermarkSize"
+                  class="border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                  value="30"
+                  min="1"
+                  max="100"
+                  placeholder="30 (Default)"
+          />
+
           <label for="threads" class="text-blue-600">FFMPEG Threads</label>
           <input
                   type="number"

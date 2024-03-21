@@ -60,6 +60,8 @@ def generate():
         subtitles_position = data.get('subtitlesPosition')  # Position of the subtitles in the video
         text_color = data.get('color') # Color of subtitle text
         watermark_path = data.get('watermarkPath') # Path to the watermark image file
+        watermark_position = data.get('watermarkPosition') # Position of the watermark in the video
+        watermark_size = float(int(data.get('watermarkSize')) / 100) # Size of the watermark in the video in percentage
 
         # Get 'useMusic' from the request data and default to False if not provided
         use_music = data.get('useMusic', False)
@@ -230,7 +232,7 @@ def generate():
 
         # Put everything together
         try:
-            final_video_path = generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00", watermark_path or "")
+            final_video_path = generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00", watermark_path or "", watermark_position, watermark_size)
         except Exception as e:
             print(colored(f"[-] Error generating final video: {e}", "red"))
             final_video_path = None

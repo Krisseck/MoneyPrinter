@@ -2,6 +2,8 @@ const videoSubject = document.querySelector("#videoSubject");
 const aiModel = document.querySelector("#aiModel");
 const voice = document.querySelector("#voice");
 const watermarkPath = document.querySelector("#watermarkPath");
+const watermarkPosition = document.querySelector("#watermarkPosition");
+const watermarkSize = document.querySelector("#watermarkSize");
 const zipUrl = document.querySelector("#zipUrl");
 const wordCount = document.querySelector("#wordCount");
 const youtubeToggle = document.querySelector("#youtubeUploadToggle");
@@ -70,6 +72,8 @@ const generateVideo = () => {
   const threads = document.querySelector("#threads").value;
   const zipUrlValue = zipUrl.value;
   const watermarkPathValue = watermarkPath.value;
+  const watermarkPositionValue = watermarkPosition.value;
+  const watermarkSizeValue = watermarkSize.value;
   const customPromptValue = customPrompt.value;
   const subtitlesPosition = document.querySelector("#subtitlesPosition").value;
   const colorHexCode = document.querySelector("#subtitlesColor").value;
@@ -87,6 +91,8 @@ const generateVideo = () => {
     useMusic: useMusicToggleState,
     zipUrl: zipUrlValue,
     watermarkPath: watermarkPathValue,
+    watermarkPosition: watermarkPositionValue,
+    watermarkSize: watermarkSizeValue,
     threads: threads,
     subtitlesPosition: subtitlesPosition,
     customPrompt: customPromptValue,
