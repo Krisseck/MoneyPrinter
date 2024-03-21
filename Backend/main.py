@@ -211,8 +211,7 @@ def generate():
                         "data": [],
                     }
                 )
-            current_tts_path = f"./temp/{uuid4()}.mp3"
-            tts(sentence, voice, filename=current_tts_path)
+            current_tts_path = tts(sentence, voice, coqui_tts_url=os.getenv('COQUI_TTS_URL'))
             audio_clip = AudioFileClip(current_tts_path)
             paths.append(audio_clip)
 

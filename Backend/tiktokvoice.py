@@ -9,6 +9,8 @@
 import base64
 import requests
 import threading
+import urllib.parse
+from uuid import uuid4
 
 from typing import List
 from termcolor import colored
@@ -64,6 +66,8 @@ VOICES = [
     "en_male_narration",  # narrator
     "en_male_funny",  # wacky
     "en_female_emotional",  # peaceful
+    # COQUI
+    "en_coquitts", # Basic Coqui TTS
 ]
 
 ENDPOINTS = [
@@ -116,26 +120,21 @@ def generate_audio(text: str, voice: str) -> bytes:
     response = requests.post(url, headers=headers, json=data)
     return response.content
 
+# send GET request to get the audio data from Coqui
+def generate_audio_coqui(text: str, endpoint: str) -> bytes:
+    url = endpoint + urllib.parse.quote(text)
+    response = requests.get(url)
+    return base64.b64encode(response.content)
 
 # creates an text to speech audio file
 def tts(
     text: str,
     voice: str = "none",
-    filename: str = "output.mp3",
     play_sound: bool = False,
-) -> None:
+    coqui_tts_url: str = ""
+) -> str:
     # checking if the website is available
     global current_endpoint
-
-    if get_api_response().status_code == 200:
-        print(colored("[+] TikTok TTS Service available!", "green"))
-    else:
-        current_endpoint = (current_endpoint + 1) % 2
-        if get_api_response().status_code == 200:
-            print(colored("[+] TTS Service available!", "green"))
-        else:
-            print(colored("[-] TTS Service not available and probably temporarily rate limited, try again later..." , "red"))
-            return
 
     # checking if arguments are valid
     if voice == "none":
@@ -150,18 +149,26 @@ def tts(
         print(colored("[-] Please specify a text", "red"))
         return
 
+    # Coqui outputs in wav, Tiktok in mp3
+    if "coqui" in voice:
+        filename = f"./temp/{uuid4()}.wav"
+    else:
+        filename = f"./temp/{uuid4()}.mp3"
+
     # creating the audio file
     try:
         if len(text) < TEXT_BYTE_LIMIT:
-            audio = generate_audio((text), voice)
-            if current_endpoint == 0:
-                audio_base64_data = str(audio).split('"')[5]
+            if "coqui" in voice:
+                audio_base64_data = generate_audio_coqui(text, coqui_tts_url)
             else:
-                audio_base64_data = str(audio).split('"')[3].split(",")[1]
+                if current_endpoint == 0:
+                    audio_base64_data = str(audio).split('"')[5]
+                else:
+                    audio_base64_data = str(audio).split('"')[3].split(",")[1]
 
-            if audio_base64_data == "error":
-                print(colored("[-] This voice is unavailable right now", "red"))
-                return
+                if audio_base64_data == "error":
+                    print(colored("[-] This voice is unavailable right now", "red"))
+                    return
 
         else:
             # Split longer text into smaller parts
@@ -170,15 +177,18 @@ def tts(
 
             # Define a thread function to generate audio for each text part
             def generate_audio_thread(text_part, index):
-                audio = generate_audio(text_part, voice)
-                if current_endpoint == 0:
-                    base64_data = str(audio).split('"')[5]
+                if "coqui" in voice:
+                    base64_data = generate_audio_coqui(text, coqui_tts_url)
                 else:
-                    base64_data = str(audio).split('"')[3].split(",")[1]
+                    audio = generate_audio(text_part, voice)
+                    if current_endpoint == 0:
+                        base64_data = str(audio).split('"')[5]
+                    else:
+                        base64_data = str(audio).split('"')[3].split(",")[1]
 
-                if audio_base64_data == "error":
-                    print(colored("[-] This voice is unavailable right now", "red"))
-                    return "error"
+                    if base64_data == "error":
+                        print(colored("[-] This voice is unavailable right now", "red"))
+                        return "error"
 
                 audio_base64_data[index] = base64_data
 
@@ -205,3 +215,5 @@ def tts(
 
     except Exception as e:
         print(colored(f"[-] An error occurred during TTS: {e}", "red"))
+
+    return filename
