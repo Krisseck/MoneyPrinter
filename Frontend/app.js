@@ -1,14 +1,3 @@
-const videoSubject = document.querySelector("#videoSubject");
-const aiModel = document.querySelector("#aiModel");
-const voice = document.querySelector("#voice");
-const watermarkPath = document.querySelector("#watermarkPath");
-const watermarkPosition = document.querySelector("#watermarkPosition");
-const watermarkSize = document.querySelector("#watermarkSize");
-const zipUrl = document.querySelector("#zipUrl");
-const wordCount = document.querySelector("#wordCount");
-const youtubeToggle = document.querySelector("#youtubeUploadToggle");
-const useMusicToggle = document.querySelector("#useMusicToggle");
-const customPrompt = document.querySelector("#customPrompt");
 const generateButton = document.querySelector("#generateButton");
 const cancelButton = document.querySelector("#cancelButton");
 
@@ -20,10 +9,8 @@ advancedOptionsToggle.addEventListener("click", () => {
   advancedOptionsToggle.textContent = emoji.includes("▼")
     ? "Show less Options ▲"
     : "Show Advanced Options ▼";
-  const advancedOptions = document.querySelector("#advancedOptions");
-  advancedOptions.classList.toggle("hidden");
+  document.querySelector("#advancedOptions").classList.toggle("hidden");
 });
-
 
 const cancelGeneration = () => {
   console.log("Canceling generation...");
@@ -62,41 +49,24 @@ const generateVideo = () => {
   // Show cancel button
   cancelButton.classList.remove("hidden");
 
-  // Get values from input fields
-  const videoSubjectValue = videoSubject.value;
-  const aiModelValue = aiModel.value;
-  const voiceValue = voice.value;
-  const wordCountValue = wordCount.value;
-  const youtubeUpload = youtubeToggle.checked;
-  const useMusicToggleState = useMusicToggle.checked;
-  const threads = document.querySelector("#threads").value;
-  const zipUrlValue = zipUrl.value;
-  const watermarkPathValue = watermarkPath.value;
-  const watermarkPositionValue = watermarkPosition.value;
-  const watermarkSizeValue = watermarkSize.value;
-  const customPromptValue = customPrompt.value;
-  const subtitlesPosition = document.querySelector("#subtitlesPosition").value;
-  const colorHexCode = document.querySelector("#subtitlesColor").value;
-
-
   const url = "/api/generate";
 
   // Construct data to be sent to the server
   const data = {
-    videoSubject: videoSubjectValue,
-    aiModel: aiModelValue,
-    voice: voiceValue,
-    wordCount: wordCountValue,
-    automateYoutubeUpload: youtubeUpload,
-    useMusic: useMusicToggleState,
-    zipUrl: zipUrlValue,
-    watermarkPath: watermarkPathValue,
-    watermarkPosition: watermarkPositionValue,
-    watermarkSize: watermarkSizeValue,
-    threads: threads,
-    subtitlesPosition: subtitlesPosition,
-    customPrompt: customPromptValue,
-    color: colorHexCode,
+    videoSubject: document.querySelector("#videoSubject").value,
+    aiModel: document.querySelector("#aiModel").value,
+    voice: document.querySelector("#voice").value,
+    wordCount: document.querySelector("#wordCount").value,
+    automateYoutubeUpload: document.querySelector("#youtubeUploadToggle").checked,
+    useMusic: document.querySelector("#useMusicToggle").checked,
+    zipUrl: document.querySelector("#zipUrl").value,
+    watermarkPath: document.querySelector("#watermarkPath").value,
+    watermarkPosition: document.querySelector("#watermarkPosition").value,
+    watermarkSize: document.querySelector("#watermarkSize").value,
+    threads: document.querySelector("#threads").value,
+    subtitlesPosition: document.querySelector("#subtitlesPosition").value,
+    customPrompt: document.querySelector("#customPrompt").value,
+    color: document.querySelector("#subtitlesColor").value,
   };
 
   // Send the actual request to the server
@@ -132,21 +102,21 @@ videoSubject.addEventListener("keyup", (event) => {
   }
 });
 
-// Load the data from localStorage on page load
+toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle"];
+fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "watermarkPosition", "watermarkSize", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Load the data from localStorage on page load
   const voiceSelect = document.getElementById("voice");
   const storedVoiceValue = localStorage.getItem("voiceValue");
 
   if (storedVoiceValue) {
     voiceSelect.value = storedVoiceValue;
   }
-});
 
-// Save the data to localStorage when the user changes the value
-toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle"];
-fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
+  // Save the data to localStorage when the user changes the value
 
-document.addEventListener("DOMContentLoaded", () => {
   toggles.forEach((id) => {
     const toggle = document.getElementById(id);
     const storedValue = localStorage.getItem(`${id}Value`);
