@@ -3,13 +3,14 @@ import requests
 from typing import List
 from termcolor import colored
 
-def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> List[str]:
+def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int, only_vertical: bool) -> List[str]:
     """
     Searches for stock videos based on a query.
 
     Args:
         query (str): The query to search for.
         api_key (str): The API key to use.
+        only_vertical (bool): Only include vertical oriented videos
 
     Returns:
         List[str]: A list of stock videos.
@@ -22,6 +23,9 @@ def search_for_stock_videos(query: str, api_key: str, it: int, min_dur: int) -> 
 
     # Build URL
     qurl = f"https://api.pexels.com/videos/search?query={query}&per_page={it}"
+
+    if only_vertical:
+        qurl = qurl + "&orientation=portrait"
 
     # Send the request
     r = requests.get(qurl, headers=headers)

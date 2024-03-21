@@ -62,6 +62,7 @@ def generate():
         watermark_path = data.get('watermarkPath') # Path to the watermark image file
         watermark_position = data.get('watermarkPosition') # Position of the watermark in the video
         watermark_size = float(int(data.get('watermarkSize')) / 100) # Size of the watermark in the video in percentage
+        onlyVertical = data.get('onlyVertical', False) # Include only vertical oriented videos from Pexels
 
         # Get 'useMusic' from the request data and default to False if not provided
         use_music = data.get('useMusic', False)
@@ -120,10 +121,10 @@ def generate():
         video_urls = []
 
         # Defines how many results it should query and search through
-        it = 15
+        it = 10
 
         # Defines the minimum duration of each clip
-        min_dur = 5
+        min_dur = 10
 
         # Loop through all search terms,
         # and search for a video of the given search term
@@ -137,7 +138,7 @@ def generate():
                     }
                 )
             found_urls = search_for_stock_videos(
-                search_term, os.getenv("PEXELS_API_KEY"), it, min_dur
+                search_term, os.getenv("PEXELS_API_KEY"), it, min_dur, onlyVertical
             )
             # Check for duplicates
             for url in found_urls:

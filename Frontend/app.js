@@ -64,6 +64,7 @@ const generateVideo = () => {
     watermarkPosition: document.querySelector("#watermarkPosition").value,
     watermarkSize: document.querySelector("#watermarkSize").value,
     threads: document.querySelector("#threads").value,
+    onlyVertical: document.querySelector("#onlyVertical").checked,
     subtitlesPosition: document.querySelector("#subtitlesPosition").value,
     customPrompt: document.querySelector("#customPrompt").value,
     color: document.querySelector("#subtitlesColor").value,
@@ -102,7 +103,7 @@ videoSubject.addEventListener("keyup", (event) => {
   }
 });
 
-toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle"];
+toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle", "onlyVertical"];
 fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "watermarkPosition", "watermarkSize", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
 
 document.addEventListener("DOMContentLoaded", () => {
