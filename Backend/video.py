@@ -200,12 +200,12 @@ def combine_videos(video_paths: List[str], max_duration: int, max_clip_duration:
 
     final_clip = concatenate_videoclips(clips)
     final_clip = final_clip.set_fps(30)
-    final_clip.write_videofile(combined_video_path, threads=threads)
+    final_clip.write_videofile(combined_video_path, threads=threads, preset="ultrafast")
 
     return combined_video_path
 
 
-def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str, threads: int, subtitles_position: str,  text_color : str) -> str:
+def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str, threads: int, subtitles_position: str,  text_color : str, watermark_path : str) -> str:
     """
     This function creates the final video, with subtitles and audio.
 
@@ -215,10 +215,14 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
         subtitles_path (str): The path to the subtitles.
         threads (int): The number of threads to use for the video processing.
         subtitles_position (str): The position of the subtitles.
+        watermark_path (str): The path of the watermark image file.
 
     Returns:
         str: The path to the final video.
     """
+
+    combined_video_clip = VideoFileClip(combined_video_path)
+
     # Make a generator that returns a TextClip when called with consecutive
     generator = lambda txt: TextClip(
         txt,
@@ -234,10 +238,16 @@ def generate_video(combined_video_path: str, tts_path: str, subtitles_path: str,
 
     # Burn the subtitles into the video
     subtitles = SubtitlesClip(subtitles_path, generator)
-    result = CompositeVideoClip([
-        VideoFileClip(combined_video_path),
+
+    clips = [
+        combined_video_clip,
         subtitles.set_pos((horizontal_subtitles_position, vertical_subtitles_position))
-    ])
+    ]
+
+    if watermark_path:
+        clips.append(ImageClip(watermark_path, duration=combined_video_clip.duration).set_pos((round(0.05 * combined_video_clip.w), "bottom")).resize(width=round(0.35 * combined_video_clip.w)))
+
+    result = CompositeVideoClip(clips)
 
     # Add the audio
     audio = AudioFileClip(tts_path)

@@ -1,4 +1,5 @@
 import os
+import shutil
 from utils import *
 from dotenv import load_dotenv
 
@@ -58,6 +59,7 @@ def generate():
         n_threads = data.get('threads')  # Amount of threads to use for video generation
         subtitles_position = data.get('subtitlesPosition')  # Position of the subtitles in the video
         text_color = data.get('color') # Color of subtitle text
+        watermark_path = data.get('watermarkPath') # Path to the watermark image file
 
         # Get 'useMusic' from the request data and default to False if not provided
         use_music = data.get('useMusic', False)
@@ -228,7 +230,7 @@ def generate():
 
         # Put everything together
         try:
-            final_video_path = generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00")
+            final_video_path = generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00", watermark_path or "")
         except Exception as e:
             print(colored(f"[-] Error generating final video: {e}", "red"))
             final_video_path = None
@@ -283,8 +285,8 @@ def generate():
                 except HttpError as e:
                     print(f"An HTTP error {e.resp.status} occurred:\n{e.content}")
 
-        video_clip = VideoFileClip(f"./temp/{final_video_path}")
         if use_music:
+            video_clip = VideoFileClip(f"./temp/{final_video_path}")
             # Select a random song
             song_path = choose_random_song()
 
@@ -303,8 +305,8 @@ def generate():
             video_clip = video_clip.set_duration(original_duration)
             video_clip.write_videofile(f"./{final_video_path}", threads=n_threads or 1)
         else:
-            video_clip.write_videofile(f"./{final_video_path}", threads=n_threads or 1)
-
+            # Just copy the file
+            shutil.copyfile(f"./temp/{final_video_path}", f"./{final_video_path}")
 
         # Let user know
         print(colored(f"[+] Video generated: {final_video_path}!", "green"))

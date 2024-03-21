@@ -1,6 +1,7 @@
 const videoSubject = document.querySelector("#videoSubject");
 const aiModel = document.querySelector("#aiModel");
 const voice = document.querySelector("#voice");
+const watermarkPath = document.querySelector("#watermarkPath");
 const zipUrl = document.querySelector("#zipUrl");
 const wordCount = document.querySelector("#wordCount");
 const youtubeToggle = document.querySelector("#youtubeUploadToggle");
@@ -68,6 +69,7 @@ const generateVideo = () => {
   const useMusicToggleState = useMusicToggle.checked;
   const threads = document.querySelector("#threads").value;
   const zipUrlValue = zipUrl.value;
+  const watermarkPathValue = watermarkPath.value;
   const customPromptValue = customPrompt.value;
   const subtitlesPosition = document.querySelector("#subtitlesPosition").value;
   const colorHexCode = document.querySelector("#subtitlesColor").value;
@@ -84,6 +86,7 @@ const generateVideo = () => {
     automateYoutubeUpload: youtubeUpload,
     useMusic: useMusicToggleState,
     zipUrl: zipUrlValue,
+    watermarkPath: watermarkPathValue,
     threads: threads,
     subtitlesPosition: subtitlesPosition,
     customPrompt: customPromptValue,
@@ -124,7 +127,7 @@ videoSubject.addEventListener("keyup", (event) => {
 });
 
 // Load the data from localStorage on page load
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   const voiceSelect = document.getElementById("voice");
   const storedVoiceValue = localStorage.getItem("voiceValue");
 
@@ -135,7 +138,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 // Save the data to localStorage when the user changes the value
 toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle"];
-fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
+fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
 
 document.addEventListener("DOMContentLoaded", () => {
   toggles.forEach((id) => {
