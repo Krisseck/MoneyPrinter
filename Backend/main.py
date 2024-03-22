@@ -63,6 +63,7 @@ def generate():
         watermark_position = data.get('watermarkPosition') # Position of the watermark in the video
         watermark_size = float(int(data.get('watermarkSize')) / 100) # Size of the watermark in the video in percentage
         onlyVertical = data.get('onlyVertical', False) # Include only vertical oriented videos from Pexels
+        metadataGeneration = data.get('metadataGeneration', True) # Generate and display metadata for video
 
         # Get 'useMusic' from the request data and default to False if not provided
         use_music = data.get('useMusic', False)
@@ -237,16 +238,18 @@ def generate():
             print(colored(f"[-] Error generating final video: {e}", "red"))
             final_video_path = None
 
-        # Define metadata for the video, we will display this to the user, and use it for the YouTube upload
-        title, description, keywords = generate_metadata(data["videoSubject"], script, ai_model)
+        if metadataGeneration:
 
-        print(colored("[-] Metadata for YouTube upload:", "blue"))
-        print(colored("   Title: ", "blue"))
-        print(colored(f"   {title}", "blue"))
-        print(colored("   Description: ", "blue"))
-        print(colored(f"   {description}", "blue"))
-        print(colored("   Keywords: ", "blue"))
-        print(colored(f"  {', '.join(keywords)}", "blue"))
+            # Define metadata for the video, we will display this to the user, and use it for the YouTube upload
+            title, description, keywords = generate_metadata(data["videoSubject"], script, ai_model)
+
+            print(colored("[-] Metadata for YouTube upload:", "blue"))
+            print(colored("   Title: ", "blue"))
+            print(colored(f"   {title}", "blue"))
+            print(colored("   Description: ", "blue"))
+            print(colored(f"   {description}", "blue"))
+            print(colored("   Keywords: ", "blue"))
+            print(colored(f"  {', '.join(keywords)}", "blue"))
 
         if automate_youtube_upload:
             # Start Youtube Uploader
