@@ -9,6 +9,7 @@ import os
 import google.generativeai as genai
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
+from groq import Groq
 
 # Load environment variables
 load_dotenv(".env")
@@ -20,6 +21,8 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
 mistralClient = MistralClient(api_key=MISTRAL_API_KEY)
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+groqClient = Groq(api_key=GROQ_API_KEY)
 
 def generate_response(prompt: str, ai_model: str) -> str:
     """
@@ -51,11 +54,8 @@ def generate_response(prompt: str, ai_model: str) -> str:
         model_name = "gpt-3.5-turbo" if ai_model == "gpt3.5-turbo" else "gpt-4-1106-preview"
 
         response = openai.chat.completions.create(
-
             model=model_name,
-
             messages=[{"role": "user", "content": prompt}],
-
         ).choices[0].message.content
     elif ai_model == 'gemmini':
         model = genai.GenerativeModel('gemini-pro')
@@ -66,6 +66,12 @@ def generate_response(prompt: str, ai_model: str) -> str:
         response = mistralClient.chat(
             model=ai_model,
             messages=[ChatMessage(role="user", content=prompt)],
+        ).choices[0].message.content
+
+    elif "groq-" in ai_model:
+        response = groqClient.chat.completions.create(
+            model=ai_model.replace("groq-", ""),
+            messages=[{"role": "user", "content": prompt}],
         ).choices[0].message.content
 
     else:
@@ -102,10 +108,10 @@ def generate_script(video_subject: str, word_count: int, ai_model: str, voice: s
     if customPrompt:
         prompt = customPrompt
     else:
-        prompt = """
-            Generate a script for a video, depending on the subject of the video.
+        prompt = f"""
+            Generate a {word_count} word script for a video, depending on the subject of the video.
 
-            The script is to be returned as a string with the specified word count.
+            The script is to be returned as a string.
 
             Here is an example of a string:
             "This is an example string."
@@ -125,7 +131,6 @@ def generate_script(video_subject: str, word_count: int, ai_model: str, voice: s
     prompt += f"""
 
     Subject: {video_subject}
-    Word count: {word_count}
     Language: {voice}
 
     """

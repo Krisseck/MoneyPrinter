@@ -25,7 +25,6 @@ from moviepy.config import change_settings
 
 # Set environment variables
 SESSION_ID = os.getenv("TIKTOK_SESSION_ID")
-openai_api_key = os.getenv('OPENAI_API_KEY')
 change_settings({"IMAGEMAGICK_BINARY": os.getenv("IMAGEMAGICK_BINARY")})
 
 # Initialize Flask
