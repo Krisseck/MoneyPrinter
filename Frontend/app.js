@@ -68,7 +68,8 @@ const generateVideo = () => {
     subtitlesPosition: document.querySelector("#subtitlesPosition").value,
     customPrompt: document.querySelector("#customPrompt").value,
     color: document.querySelector("#subtitlesColor").value,
-    metadataGeneration: document.querySelector("#metadataGeneration").checked
+    metadataGeneration: document.querySelector("#metadataGeneration").checked,
+    overrideVideo: document.querySelector("#overrideVideo").value,
   };
 
   // Send the actual request to the server
@@ -105,7 +106,7 @@ videoSubject.addEventListener("keyup", (event) => {
 });
 
 toggles = ["youtubeUploadToggle", "useMusicToggle", "reuseChoicesToggle", "onlyVertical", "metadataGeneration"];
-fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "watermarkPosition", "watermarkSize", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor"];
+fields = ["aiModel", "voice", "wordCount", "videoSubject", "zipUrl", "watermarkPath", "watermarkPosition", "watermarkSize", "customPrompt", "threads", "subtitlesPosition", "subtitlesColor", "overrideVideo"];
 
 document.addEventListener("DOMContentLoaded", () => {
 

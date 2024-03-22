@@ -64,6 +64,7 @@ def generate():
         watermark_size = float(int(data.get('watermarkSize')) / 100) # Size of the watermark in the video in percentage
         onlyVertical = data.get('onlyVertical', False) # Include only vertical oriented videos from Pexels
         metadataGeneration = data.get('metadataGeneration', True) # Generate and display metadata for video
+        overrideVideo = data.get('overrideVideo') # Override Pexels video search query
 
         # Get 'useMusic' from the request data and default to False if not provided
         use_music = data.get('useMusic', False)
@@ -111,12 +112,15 @@ def generate():
 
 
         # Generate a script
-        script = generate_script(data["videoSubject"], word_count, ai_model, voice, data["customPrompt"])  # Pass the AI model to the script generation
+        script = generate_script(data["videoSubject"], word_count, ai_model, voice_prefix, data["customPrompt"])  # Pass the AI model to the script generation
 
         # Generate search terms
-        search_terms = get_search_terms(
-            data["videoSubject"], AMOUNT_OF_STOCK_VIDEOS, script, ai_model
-        )
+        if overrideVideo:
+            search_terms = [overrideVideo]
+        else:
+            search_terms = get_search_terms(
+                data["videoSubject"], AMOUNT_OF_STOCK_VIDEOS, script, ai_model
+            )
 
         # Search for a video of the given search term
         video_urls = []
@@ -145,7 +149,6 @@ def generate():
             for url in found_urls:
                 if url not in video_urls:
                     video_urls.append(url)
-                    break
 
         # Check if video_urls is empty
         if not video_urls:
@@ -157,6 +160,9 @@ def generate():
                     "data": [],
                 }
             )
+
+        # Limit to at least 5 videos
+        video_urls = video_urls[:5]
 
         # Define video_paths
         video_paths = []
