@@ -115,10 +115,6 @@ def generate_subtitles(audio_path: str, sentences: List[str], audio_clips: List[
         str: The path to the generated subtitles.
     """
 
-    def equalize_subtitles(srt_path: str, max_chars: int = 10) -> None:
-        # Equalize subtitles
-        srt_equalizer.equalize_srt_file(srt_path, srt_path, max_chars)
-
     # Save subtitles
     subtitles_path = f"./subtitles/{uuid.uuid4()}.srt"
 
@@ -136,7 +132,7 @@ def generate_subtitles(audio_path: str, sentences: List[str], audio_clips: List[
         file.write(subtitles)
 
     # Equalize subtitles
-    equalize_subtitles(subtitles_path)
+    srt_equalizer.equalize_srt_file(subtitles_path, subtitles_path, target_chars=12)
 
     print(colored("[+] Subtitles generated.", "green"))
 

@@ -75,9 +75,6 @@ ENDPOINTS = [
     "https://tiktoktts.com/api/tiktok-tts",
 ]
 current_endpoint = 0
-# in one conversion, the text can have a maximum length of 300 characters
-TEXT_BYTE_LIMIT = 300
-
 
 # create a list by splitting a string, every element has n chars
 def split_string(string: str, chunk_size: int) -> List[str]:
@@ -157,56 +154,17 @@ def tts(
 
     # creating the audio file
     try:
-        if len(text) < TEXT_BYTE_LIMIT:
-            if "coqui" in voice:
-                audio_base64_data = generate_audio_coqui(text, coqui_tts_url)
-            else:
-                if current_endpoint == 0:
-                    audio_base64_data = str(audio).split('"')[5]
-                else:
-                    audio_base64_data = str(audio).split('"')[3].split(",")[1]
-
-                if audio_base64_data == "error":
-                    print(colored("[-] This voice is unavailable right now", "red"))
-                    return
-
+        if "coqui" in voice:
+            audio_base64_data = generate_audio_coqui(text, coqui_tts_url)
         else:
-            # Split longer text into smaller parts
-            text_parts = split_string(text, 299)
-            audio_base64_data = [None] * len(text_parts)
+            if current_endpoint == 0:
+                audio_base64_data = str(audio).split('"')[5]
+            else:
+                audio_base64_data = str(audio).split('"')[3].split(",")[1]
 
-            # Define a thread function to generate audio for each text part
-            def generate_audio_thread(text_part, index):
-                if "coqui" in voice:
-                    base64_data = generate_audio_coqui(text, coqui_tts_url)
-                else:
-                    audio = generate_audio(text_part, voice)
-                    if current_endpoint == 0:
-                        base64_data = str(audio).split('"')[5]
-                    else:
-                        base64_data = str(audio).split('"')[3].split(",")[1]
-
-                    if base64_data == "error":
-                        print(colored("[-] This voice is unavailable right now", "red"))
-                        return "error"
-
-                audio_base64_data[index] = base64_data
-
-            threads = []
-            for index, text_part in enumerate(text_parts):
-                # Create and start a new thread for each text part
-                thread = threading.Thread(
-                    target=generate_audio_thread, args=(text_part, index)
-                )
-                thread.start()
-                threads.append(thread)
-
-            # Wait for all threads to complete
-            for thread in threads:
-                thread.join()
-
-            # Concatenate the base64 data in the correct order
-            audio_base64_data = "".join(audio_base64_data)
+            if audio_base64_data == "error":
+                print(colored("[-] This voice is unavailable right now", "red"))
+                return
 
         save_audio_file(audio_base64_data, filename)
         print(colored(f"[+] Audio file saved successfully as '{filename}'", "green"))

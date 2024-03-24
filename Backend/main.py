@@ -207,6 +207,11 @@ def generate():
         sentences = list(filter(lambda x: x != "", sentences))
         paths = []
 
+        # Append periods if necessary
+        for i in range(0,len(sentences)):
+            if sentences[i][-1] != '.':
+                sentences[i] = sentences[i] + '.'
+
         # Generate TTS for every sentence
         for sentence in sentences:
             if not GENERATING:
